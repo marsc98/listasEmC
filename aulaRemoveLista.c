@@ -18,7 +18,7 @@ typedef struct noAux
 void createList(struct no **inicio, struct no **fim);
 void insertOnRight(struct no **inicio, struct no **fim, int valor);
 void insertOnLeft(struct no **inicio, struct no **fim, int valor);
-void insertOnMidle(struct no **inicio, struct no **fim, int valor, int insere);
+void insertOnMidle(struct no **inicio, struct no **fim, int valor, int insere, int lado);
 void deleteOnRight(struct no **inicio, struct no **fim);
 void deleteOnLeft(struct no **inicio, struct no **fim);
 void deleteOnMidle(struct no **inicio, struct no **fim, int valor);
@@ -34,7 +34,7 @@ int main() {
   no *fim;
   noAux *aux;
   no *atual;
-  int valor, opcao, add, insere;
+  int valor, opcao, add, insere, lado;
 
   opcao = menu();
 
@@ -78,14 +78,18 @@ int main() {
         printf("-----------------------------------------------------------------------------\n");
         showList(&inicio);
         printf("-----------------------------------------------------------------------------");
-        printf("\nDeseja inserir após qual valor acima?\n");
+        printf("\nEscolha um valor acima?\n");
         printf("\n>");
         scanf("%d",&insere);
+
+        printf("\nDeseja inserir antes ou depois do valor escolhido?\n1-Antes\n2-Depois\n");
+        printf("\n>");
+        scanf("%d",&lado);
 
         printf("\nQual valor deseja inserir?\n\n");
         scanf("%d",&valor);
 
-        insertOnMidle(&inicio,&fim, valor, insere);
+        insertOnMidle(&inicio,&fim, valor, insere, lado);
         break;
 
       case 8:
@@ -188,21 +192,40 @@ void insertOnLeft(struct no **inicio, struct no **fim, int valor) {
   }
 }
 
-void insertOnMidle(struct no **inicio, struct no **fim, int valor, int insere) {
+void insertOnMidle(struct no **inicio, struct no **fim, int valor, int insere, int lado) {
   struct no *p;
   struct no *m;
+  struct no *anterior;
   struct no *atual;
   p=(struct no*)malloc(sizeof(struct no));
 
   m = *inicio;
   atual = searchActualValue(&m, insere);
 
-  if(p) {
-    p->valor=valor;
-    p->prox=atual->prox;
-    atual->prox = p;
+  if(lado == 2) {
+    if(p) {
+      p->valor=valor;
+      p->prox=atual->prox;
+      atual->prox = p;
+    }
+  } else {
+    if(lado == 1) {
+      if(atual == *inicio) {
+        if(p) {
+          p->valor=valor;
+          p->prox=atual;
+          *inicio = p;
+        }
+      } else {
+        anterior = searchPreviousValue(&m, insere);
+        if(p) {
+          p->valor=valor;
+          p->prox=anterior->prox;
+          anterior->prox = p;
+        }
+      }
+    }
   }
-
 }
 
 void deleteOnRight(struct no **inicio, struct no **fim) {
