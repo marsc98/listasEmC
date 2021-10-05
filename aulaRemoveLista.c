@@ -199,7 +199,7 @@ void insertOnMidle(struct no **inicio, struct no **fim, int valor, int insere) {
 
   m = *inicio;
   atual = searchActualValue(&m, insere);
-  printf("\n\natual = %i", atual);
+
   if(p) {
     p->valor=valor;
     p->prox=atual->prox;
@@ -250,26 +250,25 @@ void deleteOnMidle(struct no **inicio, struct no **fim, int valor) {
   struct no *aux;
   struct no *atual;
   struct no *anterior;
-  struct noAux *m;
+  // struct noAux *m;
 
   // printf("\n\Antes = %i \n\n", proximo->valor); // proximo->valor tem
-
 
   if(*inicio == NULL) {
     printf("\n\nLista vazia\n\n\n");
   } else {
 
     aux = *inicio;
-    m = searchActualValue(&aux, valor);
-    printf("\n\nm = %i \n", m->atual); // proximo->valor tem o valor atual aqui 
+    // m = searchActualValue(&aux, valor);
 
-    atual = m->atual;
-    anterior = m->anterior;
+    anterior = searchPreviousValue(&aux, valor);
+    atual = searchActualValue(&aux, valor);
 
-    // *inicio = (*inicio)->prox;
-    // if(*inicio == NULL) 
-    //   *fim = NULL;
-    // free(aux);
+    anterior->prox = atual->prox;
+    printf("\n2\n");
+
+
+    free(atual);
   }
 }
 
@@ -278,7 +277,7 @@ no * searchActualValue(struct no **inicio, int valor) {
     printf("\n\nLista vazia\n\n\n");
   } else {
     struct no *p;
-    struct noAux *m;
+    // struct noAux *m;
     p=(struct no*)malloc(sizeof(struct no));
     
     if(p){
@@ -291,8 +290,8 @@ no * searchActualValue(struct no **inicio, int valor) {
       while(aux->valor != NULL) {
 
         if(aux->valor == valor) {
-          m->anterior = anterior;
-          m->atual = aux;
+          // m->anterior = anterior;
+          // m->atual = aux;
           return aux;
         }
         aux = aux->prox;
@@ -307,7 +306,7 @@ no * searchPreviousValue(struct no **inicio, int valor) {
     printf("\n\nLista vazia\n\n\n");
   } else {
     struct no *p;
-    struct noAux *m;
+    // struct noAux *m;
     p=(struct no*)malloc(sizeof(struct no));
     
     if(p){
@@ -320,8 +319,8 @@ no * searchPreviousValue(struct no **inicio, int valor) {
       while(aux->valor != NULL) {
 
         if(aux->valor == valor) {
-          m->anterior = anterior;
-          m->atual = aux;
+          // m->anterior = anterior;
+          // m->atual = aux;
           return anterior;
         }
         aux = aux->prox;
