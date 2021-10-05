@@ -38,7 +38,7 @@ int main() {
 
   opcao = menu();
 
-  while(opcao != 10){
+  while(opcao != 0){
 
     switch (opcao) {
       case 1:
@@ -117,14 +117,11 @@ int main() {
           printf("\n\nValor %i encontrado\n\n", atual->valor);
         }
         break;
-      case 10:
-        opcao = 10;
-        break;
 
       default:
         printf("\n\nOpcao nao encontrada\n\n"); 
         break;
-      }
+    }
     opcao = menu();
   }
 }
@@ -141,7 +138,7 @@ int menu() {
     printf("7- Inserir onde quiser\n");
     printf("8- Deletar onde quiser\n");
     printf("9- Buscar valor\n");
-    printf("10- Sair\n\n");
+    printf("0- Sair\n\n");
     scanf("%d",&op);
     return op;
 }
@@ -248,27 +245,31 @@ void deleteOnLeft(struct no **inicio, struct no **fim) {
 
 void deleteOnMidle(struct no **inicio, struct no **fim, int valor) {
   struct no *aux;
+  struct no *f;
   struct no *atual;
   struct no *anterior;
   // struct noAux *m;
-
-  // printf("\n\Antes = %i \n\n", proximo->valor); // proximo->valor tem
 
   if(*inicio == NULL) {
     printf("\n\nLista vazia\n\n\n");
   } else {
 
     aux = *inicio;
+    f = *fim;
     // m = searchActualValue(&aux, valor);
 
-    anterior = searchPreviousValue(&aux, valor);
     atual = searchActualValue(&aux, valor);
 
-    anterior->prox = atual->prox;
-    printf("\n2\n");
-
-
-    free(atual);
+    if(*inicio == atual) {
+      *inicio = (*inicio)->prox;
+      if(*inicio == NULL) 
+        *fim = NULL;
+      free(aux);
+    } else {
+      anterior = searchPreviousValue(&aux, valor);
+      anterior->prox = atual->prox;
+      free(atual);
+    }
   }
 }
 
@@ -281,11 +282,12 @@ no * searchActualValue(struct no **inicio, int valor) {
     p=(struct no*)malloc(sizeof(struct no));
     
     if(p){
-      struct no *anterior;
+      // struct no *anterior;
       struct no *aux;
 
-      anterior = *inicio;
-      aux = anterior->prox;
+      // anterior = *inicio;
+      // aux = anterior->prox;
+      aux = *inicio;
 
       while(aux->valor != NULL) {
 
@@ -295,7 +297,7 @@ no * searchActualValue(struct no **inicio, int valor) {
           return aux;
         }
         aux = aux->prox;
-        anterior = anterior->prox;
+        // anterior = anterior->prox;
       }
     }
   }
